@@ -1,5 +1,5 @@
-const Recommendation = require('../models/recommendation.model');
-const Movie = require('../models/movie.model');
+const Recommendation = require('../models/recommendation');
+const Movie = require('../models/movie');
 
 class RecommendationController {
     // Get recommendations for user

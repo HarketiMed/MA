@@ -1,16 +1,16 @@
 const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
 const cors = require('cors');
-const connectDB = require('./config/db.config');
-const { initKafkaProducer, initKafkaConsumer } = require('./services/kafka.service');
+const connectDB = require('./config/db');
+const { initKafkaProducer, initKafkaConsumer } = require('./services/kafkaservice');
 
 // Import GraphQL typeDefs and resolvers
-const userTypeDefs = require('./graphql/schemas/user.schema');
-const userResolvers = require('./graphql/resolvers/user.resolver');
-const movieTypeDefs = require('./graphql/schemas/movie.schema');
-const movieResolvers = require('./graphql/resolvers/movie.resolver');
-const recommendationTypeDefs = require('./graphql/schemas/recommendation.schema');
-const recommendationResolvers = require('./graphql/resolvers/recommendation.resolver');
+const userTypeDefs = require('./graphql/schemas/userSchema');
+const userResolvers = require('./graphql/resolvers/userresolver');
+const movieTypeDefs = require('./graphql/schemas/movieSchema');
+const movieResolvers = require('./graphql/resolvers/movieresolver');
+const recommendationTypeDefs = require('./graphql/schemas/recommendationSchema');
+const recommendationResolvers = require('./graphql/resolvers/recommendationRes');
 
 const app = express();
 

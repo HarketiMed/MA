@@ -1,5 +1,5 @@
-const Movie = require('../../models/movie.model');
-const grpcService = require('../../services/grpc.service');
+const Movie = require('../schemas/movieSchema');
+const grpcService = require('../../services/grpcservice');
 const { AuthenticationError } = require('apollo-server-express');
 
 module.exports = {

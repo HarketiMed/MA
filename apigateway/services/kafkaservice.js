@@ -1,4 +1,4 @@
-const { producer, consumer } = require('../config/kafka.config');
+const { producer, consumer } = require('../config/kafka');
 
 const initKafkaProducer = async () => {
   await producer.connect();
