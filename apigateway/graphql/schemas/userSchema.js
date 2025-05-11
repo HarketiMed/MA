@@ -20,12 +20,12 @@ const typeDefs = gql`
     user: User!
   }
 
-  extend type Query {
+  type Query {
     getUser(id: ID!): User
     getAllUsers: [User]
   }
 
-  extend type Mutation {
+  type Mutation {
     registerUser(input: UserInput!): AuthPayload
     loginUser(email: String!, password: String!): AuthPayload
   }

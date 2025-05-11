@@ -9,21 +9,21 @@ const userTypeDefs = require('./graphql/schemas/userSchema');
 const userResolvers = require('./graphql/resolvers/userresolver');
 const movieTypeDefs = require('./graphql/schemas/movieSchema');
 const movieResolvers = require('./graphql/resolvers/movieresolver');
-const recommendationTypeDefs = require('./graphql/schemas/recommendationSchema');
-const recommendationResolvers = require('./graphql/resolvers/recommendationRes');
+
 
 const app = express();
 
 // Middleware
 app.use(cors());
 app.use(express.json());
+// Middleware to parse JSO
 
 // Connect to MongoDB
 connectDB();
 
 // Combine all GraphQL schemas and resolvers
-const typeDefs = [userTypeDefs, movieTypeDefs, recommendationTypeDefs];
-const resolvers = [userResolvers, movieResolvers, recommendationResolvers];
+const typeDefs = [userTypeDefs, movieTypeDefs];
+const resolvers = [userResolvers, movieResolvers];
 
 // Create Apollo Server
 const server = new ApolloServer({

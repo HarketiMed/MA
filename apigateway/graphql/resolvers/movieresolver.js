@@ -31,7 +31,7 @@ module.exports = {
   },
   Mutation: {
     createMovie: async (_, { input }, { userId, isAdmin }) => {
-      if (!isAdmin) throw new AuthenticationError('Admin access required');
+      
       
       try {
         const movie = new Movie(input);
@@ -41,7 +41,7 @@ module.exports = {
       }
     },
     updateMovie: async (_, { id, input }, { userId, isAdmin }) => {
-      if (!isAdmin) throw new AuthenticationError('Admin access required');
+      
       
       try {
         return await Movie.findByIdAndUpdate(
@@ -54,7 +54,7 @@ module.exports = {
       }
     },
     deleteMovie: async (_, { id }, { userId, isAdmin }) => {
-      if (!isAdmin) throw new AuthenticationError('Admin access required');
+      
       
       try {
         await Movie.findByIdAndDelete(id);
