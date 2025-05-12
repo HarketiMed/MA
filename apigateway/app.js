@@ -3,7 +3,7 @@ const { ApolloServer } = require('apollo-server-express');
 const cors = require('cors');
 const connectDB = require('./config/db');
 const { initKafkaProducer, initKafkaConsumer } = require('./services/kafkaservice');
-
+const routes = require('./routes');
 // Import GraphQL typeDefs and resolvers
 const userTypeDefs = require('./graphql/schemas/userSchema');
 const userResolvers = require('./graphql/resolvers/userresolver');
@@ -11,8 +11,10 @@ const movieTypeDefs = require('./graphql/schemas/movieSchema');
 const movieResolvers = require('./graphql/resolvers/movieresolver');
 
 
-const app = express();
 
+const app = express();
+app.use(express.json())
+app.use('/', routes); 
 // Middleware
 app.use(cors());
 app.use(express.json());

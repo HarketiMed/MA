@@ -1,58 +1,37 @@
-const Movie = require('../models/movie.model');
-const grpcService = require('../services/grpc.service');
+const Movie = require('../models/movie');
+const grpcService = require('../services/grpcservice');
 
 class MovieController {
-    // Create a new movie (Admin only)
+   
     static async createMovie(req, res) {
         try {
-            if (!req.user.isAdmin) {
-                return res.status(403).json({ error: 'Admin access required' });
-            }
-
-            const { title, description, releaseYear, director, genre, duration, posterUrl } = req.body;
+           
             
-            // Validate input
-            if (!title || !description || !releaseYear || !director || !genre || !duration) {
-                return res.status(400).json({ error: 'Required fields are missing' });
-            }
+            
+            
 
-            const movie = new Movie({
-                title,
-                description,
-                releaseYear,
-                director,
-                genre,
-                duration,
-                posterUrl
-            });
-
+            const movie = await Movie.create(req.body);
+            
             const savedMovie = await movie.save();
-            res.status(201).json(savedMovie);
+            return res.status(201).json(savedMovie);
         } catch (err) {
             console.error('Create movie error:', err);
-            res.status(500).json({ error: 'Failed to create movie' });
+            return res.status(500).json({ error: 'Failed to create movie' });
         }
     }
 
     // Get all movies
     static async getAllMovies(req, res) {
         try {
-            const { limit = 10, offset = 0, search } = req.query;
-            
-            let query = {};
-            if (search) {
-                query = { $text: { $search: search } };
-            }
+           
 
-            const movies = await Movie.find(query)
-                .skip(parseInt(offset))
-                .limit(parseInt(limit))
-                .sort({ createdAt: -1 });
+            const movies = await Movie.find(req.query)
+                
 
-            res.json(movies);
+            return res.json(movies);
         } catch (err) {
             console.error('Get movies error:', err);
-            res.status(500).json({ error: 'Failed to fetch movies' });
+            return res.status(500).json({ error: 'Failed to fetch movies' });
         }
     }
 
