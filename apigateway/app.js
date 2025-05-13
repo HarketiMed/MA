@@ -5,14 +5,15 @@ const connectDB = require('./config/db');
 const { initKafkaProducer, initKafkaConsumer } = require('./services/kafkaservice');
 const routes = require('./routes');
 // Import GraphQL typeDefs and resolvers
-const userTypeDefs = require('./graphql/schemas/userSchema');
+const userTypeDefs = require('./graphql/schemas/userSchema.gql');
 const userResolvers = require('./graphql/resolvers/userresolver');
-const movieTypeDefs = require('./graphql/schemas/movieSchema');
+const movieTypeDefs = require('./graphql/schemas/movieSchema.gql');
 const movieResolvers = require('./graphql/resolvers/movieresolver');
 
 
 
 const app = express();
+app.use(express.json())
 app.use(express.json())
 app.use('/', routes); 
 // Middleware
@@ -31,14 +32,9 @@ const resolvers = [userResolvers, movieResolvers];
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: ({ req }) => {
-    // Get the user token from the headers
-    const token = req.headers.authorization || '';
-    
-    // Try to retrieve a user with the token
-    // Add the user to the context
-    return { token };
-  },
+  userTypeDefs,
+  movieTypeDefs
+  
 });
 
 // Start Apollo Server

@@ -1,0 +1,47 @@
+const { gql } = require('apollo-server-express');
+
+const typeDefs = gql`
+  type Movie {
+    id: ID!
+    title: String!
+    description: String
+    releaseYear: Int
+    director: String
+    genre: String
+    duration: Int
+    createdAt: String!
+    updatedAt: String!
+  }
+
+  input MovieInput {
+    title: String!
+    description: String
+    releaseYear: Int
+    director: String
+    genre: String
+    duration: Int
+  }
+
+  input MovieUpdateInput {
+    title: String
+    description: String
+    releaseYear: Int
+    director: String
+    genre: String
+    duration: Int
+  }
+
+  type Query {
+    getMovie(id: ID!): Movie
+    getAllMovies(sortBy: String, limit: Int, offset: Int): [Movie]!
+    searchMovies(query: String!): [Movie]!
+  }
+
+  type Mutation {
+    createMovie(input: MovieInput!): Movie!
+    updateMovie(id: ID!, input: MovieUpdateInput!): Movie!
+    deleteMovie(id: ID!): Boolean!
+  }
+`;
+
+module.exports = typeDefs;
