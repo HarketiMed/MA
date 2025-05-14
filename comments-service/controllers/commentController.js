@@ -1,17 +1,67 @@
-const Comment = require('../models/comment');
+const { Comment } = require('../models/comment');
+const { Kafka } = require('kafkajs');
 
-// Create a new comment
+// Initialize Kafka producer (single instance)
+const kafka = new Kafka({
+  clientId: 'comment-service',
+  brokers: [process.env.KAFKA_BROKERS || 'localhost:9092']
+});
+const producer = kafka.producer();
+
+// Connect producer at startup
+(async () => {
+  try {
+    await producer.connect();
+    console.log('Connected to Kafka');
+  } catch (err) {
+    console.error('Could not connect to Kafka:', err);
+  }
+})();
+
 exports.createComment = async (req, res) => {
-    try {
-        const { content } = req.body;
-        const newComment = new Comment({ content });
-        await newComment.save();
-        res.status(201).json(newComment);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-};
+  try {
+    
+    // 2. Create and save comment
+ 
+    // 3. Prepare Kafka message
+    const kafkaMessage = {
+      type: 'COMMENT_CREATED',
+      data: {
+        
+        content: req.body,
+        
+      }
+    };
 
+    // 4. Send to Kafka
+    await producer.send({
+      topic: 'sentiment-results',
+      messages: [{ value: JSON.stringify(kafkaMessage) }]
+    });
+
+    // 5. Return response
+    res.status(201).json({
+      success: true,
+      comment: req.body
+    });
+
+  } catch (err) {
+    console.error('Error in createComment:', err);
+    
+    // Handle specific error types
+    if (err.name === 'ValidationError') {
+      return res.status(400).json({ 
+        error: 'Validation error',
+        details: err.errors 
+      });
+    }
+    
+    res.status(500).json({ 
+      error: 'Internal server error',
+      message: err.message 
+    });
+  }
+};
 // Get all comments
 exports.getAllComments = async (req, res) => {
     try {
